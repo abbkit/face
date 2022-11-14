@@ -7,7 +7,10 @@ import com.arcsoft.face.enums.ErrorInfo;
 import com.arcsoft.face.enums.ImageFormat;
 import org.bytedeco.javacv.*;
 import org.bytedeco.opencv.global.opencv_imgproc;
-import org.bytedeco.opencv.opencv_core.*;
+import org.bytedeco.opencv.opencv_core.CvPoint;
+import org.bytedeco.opencv.opencv_core.CvScalar;
+import org.bytedeco.opencv.opencv_core.IplImage;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedList;

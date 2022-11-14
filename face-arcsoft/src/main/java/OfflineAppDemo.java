@@ -3,8 +3,6 @@ import com.arcsoft.face.enums.DetectMode;
 import com.arcsoft.face.enums.DetectOrient;
 import com.arcsoft.face.enums.ErrorInfo;
 import com.arcsoft.face.enums.ImageFormat;
-import com.sun.imageio.plugins.common.ImageUtil;
-import org.bytedeco.flycapture.FlyCapture2.Image;
 import org.bytedeco.javacv.*;
 import org.bytedeco.opencv.global.opencv_imgproc;
 import org.bytedeco.opencv.opencv_core.CvPoint;
