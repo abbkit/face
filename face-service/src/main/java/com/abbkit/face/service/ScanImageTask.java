@@ -4,7 +4,6 @@ import cn.hutool.crypto.SecureUtil;
 import com.abbkit.face.engine.FaceEngine;
 import com.abbkit.face.engine.model.FaceFeature;
 import com.abbkit.face.service.entity.FaceRecordEntity;
-import com.abbkit.face.service.FaceService;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.util.Base64Utils;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -35,18 +35,25 @@ public class ScanImageTask {
         File dir=new File(fileDirPath);
         File[] listFiles = dir.listFiles();
         for (File listFile : listFiles) {
+            if(listFile.isDirectory()) continue;
             log.info("process file:"+listFile.getAbsolutePath());
-            FaceFeature faceFeature = faceEngine.faceFeatureImage(listFile);
-            log.info(listFile.getAbsolutePath()+">"+faceFeature.toString());
-
-            FaceRecordEntity faceRecordEntity=new FaceRecordEntity();
-            faceRecordEntity.setFaceId(identifierGenerator.nextId(null));
-            faceRecordEntity.setFileUrl(listFile.getAbsolutePath());
-            faceRecordEntity.setRecordTime(LocalDateTime.now());
-            faceRecordEntity.setFeature(Base64Utils.encodeToString(faceFeature.getFeature()));
-            String featureMd5 = SecureUtil.md5(faceRecordEntity.getFeature());
-            faceRecordEntity.setMd5(featureMd5);
-            faceService.saveFace(faceRecordEntity);
+            List<FaceFeature> faceFeatureList;
+            boolean isVideo = listFile.getName().contains("mp4");
+            if(isVideo){
+                faceFeatureList = faceEngine.allFaceFeatureVideo(listFile);
+            }else {
+                faceFeatureList = faceEngine.allFaceFeatureImage(listFile);
+            }
+            for (FaceFeature faceFeature : faceFeatureList) {
+                FaceRecordEntity faceRecordEntity=new FaceRecordEntity();
+                faceRecordEntity.setFaceId(identifierGenerator.nextId(null));
+                faceRecordEntity.setFileUrl(listFile.getAbsolutePath());
+                faceRecordEntity.setRecordTime(LocalDateTime.now());
+                faceRecordEntity.setFeature(Base64Utils.encodeToString(faceFeature.getFeature()));
+                String featureMd5 = SecureUtil.md5(faceRecordEntity.getFeature());
+                faceRecordEntity.setMd5(featureMd5);
+                faceService.saveFace(faceRecordEntity);
+            }
         }
 
 

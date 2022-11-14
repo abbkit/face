@@ -1,7 +1,10 @@
 package com.abbkit.face.engine.impl.arcsoft;
 
 import com.arcsoft.face.FaceEngine;
+import com.arcsoft.face.FaceFeature;
 
+import java.io.File;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -31,6 +34,7 @@ abstract public class ArcSoftEngineWorker {
 
     abstract public void init(Key key,ArcSoftEngineConfiguration arcSoftEngineConfiguration, ArcSoftFunctionConfiguration arcSoftFunctionConfiguration);
 
+    abstract public List<FaceFeature> syncFaceFeature(File file) throws Exception;
 
 
 }

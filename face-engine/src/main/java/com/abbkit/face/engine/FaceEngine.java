@@ -21,5 +21,14 @@ public interface FaceEngine {
      */
     List<FaceFeature> allFaceFeatureImage(File file) throws Exception;
 
+    /**
+     * 获取视频中的所有人脸特征数据
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    List<FaceFeature> allFaceFeatureVideo(File file) throws Exception;
 
+
+    void scanFaceFeatureVideo(File file,FaceFeatureListener listener) throws Exception;
 }

@@ -1,6 +1,7 @@
 package com.abbkit.face.engine.impl.arcsoft;
 
 import com.abbkit.face.engine.FaceEngine;
+import com.abbkit.face.engine.FaceFeatureListener;
 import com.abbkit.face.engine.model.FaceFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +58,22 @@ public class ArcSoftEngine implements FaceEngine {
             featureList.add(feature);
         }
         return featureList;
+    }
+
+    @Override
+    public List<FaceFeature> allFaceFeatureVideo(File file) throws Exception {
+        List<com.arcsoft.face.FaceFeature> faceFeatureList = videoWorker.syncFaceFeature(file);
+        List<FaceFeature> featureList=new ArrayList<>();
+        for (com.arcsoft.face.FaceFeature faceFeature : faceFeatureList) {
+            FaceFeature feature=new FaceFeature();
+            feature.setFeature(faceFeature.getFeatureData());
+            featureList.add(feature);
+        }
+        return featureList;
+    }
+
+    @Override
+    public void scanFaceFeatureVideo(File file, FaceFeatureListener listener) throws Exception {
+
     }
 }
