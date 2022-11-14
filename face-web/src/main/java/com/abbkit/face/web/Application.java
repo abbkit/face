@@ -1,6 +1,7 @@
 package com.abbkit.face.web;
 
 import com.abbkit.face.engine.impl.arcsoft.EnableArcSoft;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableArcSoft
 @ComponentScan("com.abbkit.face")
+@MapperScan("com.abbkit.face.service.mapper")
 public class Application {
 
     public static void main(String[] args) {
