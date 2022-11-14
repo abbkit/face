@@ -48,5 +48,11 @@ public class FaceRecordEntity {
       @TableField("record_time")
     private LocalDateTime recordTime;
 
+    /**
+     * 特征数据的MD5值
+     */
+    @TableField("md5")
+    private String md5;
+
 
 }

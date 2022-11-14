@@ -1,5 +1,6 @@
-package com.abbkit.face.task;
+package com.abbkit.face.service;
 
+import cn.hutool.crypto.SecureUtil;
 import com.abbkit.face.engine.FaceEngine;
 import com.abbkit.face.engine.model.FaceFeature;
 import com.abbkit.face.service.entity.FaceRecordEntity;
@@ -26,7 +27,7 @@ public class ScanImageTask {
 
     private DefaultIdentifierGenerator identifierGenerator=new DefaultIdentifierGenerator();
 
-    @Scheduled(cron="0/2 * * * * ?")
+    @Scheduled(cron="0/5 * * * * ?")
     public void scan() throws Exception {
 
         String fileDirPath = "D:\\face\\images";
@@ -43,6 +44,8 @@ public class ScanImageTask {
             faceRecordEntity.setFileUrl(listFile.getAbsolutePath());
             faceRecordEntity.setRecordTime(LocalDateTime.now());
             faceRecordEntity.setFeature(Base64Utils.encodeToString(faceFeature.getFeature()));
+            String featureMd5 = SecureUtil.md5(faceRecordEntity.getFeature());
+            faceRecordEntity.setMd5(featureMd5);
             faceService.saveFace(faceRecordEntity);
         }
 
