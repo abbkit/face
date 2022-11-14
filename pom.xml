@@ -15,12 +15,18 @@
         <version>2.7.5</version>
     </parent>
 
-
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <modules>
+        <module>face-engine</module>
+        <module>face-service</module>
+        <module>face-web</module>
+        <module>face-engine-arcsoft</module>
+    </modules>
 
 
     <dependencyManagement>
