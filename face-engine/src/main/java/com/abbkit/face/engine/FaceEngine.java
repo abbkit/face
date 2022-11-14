@@ -19,7 +19,7 @@ public interface FaceEngine {
      * @param file
      * @return
      */
-    List<FaceFeature> faceFeatureListImage(File file) throws Exception;
+    List<FaceFeature> allFaceFeatureImage(File file) throws Exception;
 
 
 }

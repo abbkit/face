@@ -8,6 +8,7 @@ import com.arcsoft.face.enums.ImageFormat;
 import com.arcsoft.face.toolkit.ImageInfo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -18,7 +19,7 @@ public class ArcSoftEngineImageWorker extends ArcSoftEngineWorker {
 
     private ReentrantLock lock=new ReentrantLock();
 
-    public FaceFeature syncFaceFeature(File file) throws Exception{
+    public List<FaceFeature> syncFaceFeature(File file) throws Exception{
 
         try {
             lock.lock();
@@ -39,12 +40,16 @@ public class ArcSoftEngineImageWorker extends ArcSoftEngineWorker {
             }
 
             if(imageInfoList.size()>0) {
-                FaceFeature faceFeature = new FaceFeature();
-                errorCode = faceEngine.extractFaceFeature(imageData, width, height, ImageFormat.CP_PAF_BGR24, imageInfoList.get(0), faceFeature);
-                if (errorCode != ErrorInfo.MOK.getValue()) {
-                    throw new RuntimeException(""+errorCode);
+                List<FaceFeature> faceFeatureList = new ArrayList<>();
+                for (FaceInfo faceInfo : imageInfoList) {
+                    FaceFeature faceFeature=new FaceFeature();
+                    errorCode = faceEngine.extractFaceFeature(imageData, width, height, ImageFormat.CP_PAF_BGR24, faceInfo, faceFeature);
+                    if (errorCode != ErrorInfo.MOK.getValue()) {
+                        throw new RuntimeException(""+errorCode);
+                    }
+                    faceFeatureList.add(faceFeature);
                 }
-                return faceFeature;
+                return faceFeatureList;
             }
             return null;
         }finally {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,14 +41,21 @@ public class ArcSoftEngine implements FaceEngine {
 
     @Override
     public FaceFeature faceFeatureImage(File file) throws Exception {
-        com.arcsoft.face.FaceFeature faceFeature = imageWorker.syncFaceFeature(file);
+        List<com.arcsoft.face.FaceFeature> faceFeatureList = imageWorker.syncFaceFeature(file);
         FaceFeature feature=new FaceFeature();
-        feature.setFeature(faceFeature.getFeatureData());
+        feature.setFeature(faceFeatureList.get(0).getFeatureData());
         return feature;
     }
 
     @Override
-    public List<FaceFeature> faceFeatureListImage(File file) throws Exception {
-        return null;
+    public List<FaceFeature> allFaceFeatureImage(File file) throws Exception {
+        List<com.arcsoft.face.FaceFeature> faceFeatureList = imageWorker.syncFaceFeature(file);
+        List<FaceFeature> featureList=new ArrayList<>();
+        for (com.arcsoft.face.FaceFeature faceFeature : faceFeatureList) {
+            FaceFeature feature=new FaceFeature();
+            feature.setFeature(faceFeature.getFeatureData());
+            featureList.add(feature);
+        }
+        return featureList;
     }
 }
