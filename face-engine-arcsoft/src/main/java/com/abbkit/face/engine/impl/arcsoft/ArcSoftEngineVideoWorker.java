@@ -42,7 +42,7 @@ public class ArcSoftEngineVideoWorker extends ArcSoftEngineWorker {
             grabber.start();
 
             //转换
-            OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
+            OpenCVFrameConverter.ToIplImage frameConverter = new OpenCVFrameConverter.ToIplImage();
             List<FaceFeature> faceFeatureList=new ArrayList<>();
             int lengthInFrames = grabber.getLengthInFrames();
             for (int i = 0; i < lengthInFrames; i++) {
@@ -53,7 +53,7 @@ public class ArcSoftEngineVideoWorker extends ArcSoftEngineWorker {
                     log.error(e.getMessage()+"file:"+file.getAbsolutePath());
                     break;
                 }
-                IplImage iplImage = converter.convert(frame);
+                IplImage iplImage = frameConverter.convert(frame);
                 byte[] imageData = new byte[iplImage.imageSize()];
                 iplImage.imageData().get(imageData);
                 //提取人脸信息
@@ -64,6 +64,7 @@ public class ArcSoftEngineVideoWorker extends ArcSoftEngineWorker {
                 }
                 int faceNum = imageInfoList.size();
                 if(faceNum > 0){
+                    String faceIdLink="";
                     for (FaceInfo faceInfo : imageInfoList) {
                         FaceFeature faceFeature=new FaceFeature();
                         faceEngine.extractFaceFeature(imageData,iplImage.width(), iplImage.height(),
@@ -79,13 +80,13 @@ public class ArcSoftEngineVideoWorker extends ArcSoftEngineWorker {
                         CvPoint leftTop =  cvPoint(x,y);
                         CvPoint rightBottom = cvPoint(xMax,yMax);
                         opencv_imgproc.cvRectangle(iplImage, leftTop, rightBottom,cvScalar,1,4,0);
-
-                        Frame outFrame = converter.convert(iplImage);
-                        String imageMat="jpg";
-                        String filePath="D:\\face\\images\\out\\"+ faceInfo.getFaceId()+"_"+i+"."+imageMat;
-                        writeFrame2Image(outFrame,filePath,imageMat);
-
+                        faceIdLink=faceIdLink+"_"+faceInfo.getFaceId();
                     }
+                    Frame outFrame = frameConverter.convert(iplImage);
+                    String imageMat="jpg";
+                    String filePath="D:\\face\\images\\out\\"
+                            + faceIdLink.replaceFirst("_","")+"_"+i+"."+imageMat;
+                    writeFrame2Image(outFrame,filePath,imageMat);
 
                 }
 
