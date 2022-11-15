@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.LocalDateTimeTypeHandler;
 
 import java.time.LocalDateTime;
 
@@ -45,7 +46,7 @@ public class FaceRecordEntity {
       /**
      * 记录时间
      */
-      @TableField("record_time")
+      @TableField(value = "record_time",typeHandler = LocalDateTimeTypeHandler.class)
     private LocalDateTime recordTime;
 
     /**

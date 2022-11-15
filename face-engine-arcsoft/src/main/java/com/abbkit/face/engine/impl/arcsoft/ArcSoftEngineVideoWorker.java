@@ -19,7 +19,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,7 +63,6 @@ public class ArcSoftEngineVideoWorker extends ArcSoftEngineWorker {
                 }
                 int faceNum = imageInfoList.size();
                 if(faceNum > 0){
-                    String faceIdLink="";
                     for (FaceInfo faceInfo : imageInfoList) {
                         FaceFeature faceFeature=new FaceFeature();
                         faceEngine.extractFaceFeature(imageData,iplImage.width(), iplImage.height(),
@@ -80,17 +78,17 @@ public class ArcSoftEngineVideoWorker extends ArcSoftEngineWorker {
                         CvPoint leftTop =  cvPoint(x,y);
                         CvPoint rightBottom = cvPoint(xMax,yMax);
                         opencv_imgproc.cvRectangle(iplImage, leftTop, rightBottom,cvScalar,1,4,0);
-                        faceIdLink=faceIdLink+"_"+faceInfo.getFaceId();
                     }
                     Frame outFrame = frameConverter.convert(iplImage);
                     String imageMat="jpg";
-                    String filePath="D:\\face\\images\\out\\"
-                            + faceIdLink.replaceFirst("_","")+"_"+i+"."+imageMat;
+                    String filePath="D:\\face\\images\\out\\"+i+"."+imageMat;
                     writeFrame2Image(outFrame,filePath,imageMat);
 
                 }
 
             }
+
+            return faceFeatureList;
 
         }catch (Exception e){
             throw e;
@@ -99,7 +97,6 @@ public class ArcSoftEngineVideoWorker extends ArcSoftEngineWorker {
                 grabber.close();
             }
         }
-        return Collections.emptyList();
     }
 
     private static void writeFrame2Image(Frame frame, String filePath, String imageMat)throws Exception {

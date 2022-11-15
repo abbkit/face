@@ -27,7 +27,7 @@ public class ScanImageTask {
 
     private DefaultIdentifierGenerator identifierGenerator=new DefaultIdentifierGenerator();
 
-    @Scheduled(cron="0/5 * * * * ?")
+    @Scheduled(cron="0/30 * * * * ?")
     public void scan() throws Exception {
 
         String fileDirPath = "D:\\face\\images";
@@ -37,22 +37,32 @@ public class ScanImageTask {
         for (File listFile : listFiles) {
             if(listFile.isDirectory()) continue;
             log.info("process file:"+listFile.getAbsolutePath());
-            List<FaceFeature> faceFeatureList;
-            boolean isVideo = listFile.getName().contains("mp4");
-            if(isVideo){
-                faceFeatureList = faceEngine.allFaceFeatureVideo(listFile);
-            }else {
-                faceFeatureList = faceEngine.allFaceFeatureImage(listFile);
-            }
-            for (FaceFeature faceFeature : faceFeatureList) {
-                FaceRecordEntity faceRecordEntity=new FaceRecordEntity();
-                faceRecordEntity.setFaceId(identifierGenerator.nextId(null));
-                faceRecordEntity.setFileUrl(listFile.getAbsolutePath());
-                faceRecordEntity.setRecordTime(LocalDateTime.now());
-                faceRecordEntity.setFeature(Base64Utils.encodeToString(faceFeature.getFeature()));
-                String featureMd5 = SecureUtil.md5(faceRecordEntity.getFeature());
-                faceRecordEntity.setMd5(featureMd5);
-                faceService.saveFace(faceRecordEntity);
+            try {
+                List<FaceFeature> faceFeatureList;
+                boolean isVideo = listFile.getName().contains("mp4");
+                if (isVideo) {
+                    faceFeatureList = faceEngine.allFaceFeatureVideo(listFile);
+                } else {
+                    faceFeatureList = faceEngine.allFaceFeatureImage(listFile);
+                }
+                for (FaceFeature faceFeature : faceFeatureList) {
+                    try {
+                        FaceRecordEntity faceRecordEntity = new FaceRecordEntity();
+                        faceRecordEntity.setFaceId(identifierGenerator.nextId(null));
+                        faceRecordEntity.setFileUrl(listFile.getAbsolutePath());
+                        faceRecordEntity.setRecordTime(LocalDateTime.now());
+                        faceRecordEntity.setFeature(Base64Utils.encodeToString(faceFeature.getFeature()));
+                        String featureMd5 = SecureUtil.md5(faceRecordEntity.getFeature());
+                        faceRecordEntity.setMd5(featureMd5);
+                        faceService.saveFace(faceRecordEntity);
+                    }catch (Exception e){
+                        log.error(e.getMessage());
+                    }
+
+                }
+
+            }catch (Exception e){
+                log.error(e.getMessage());
             }
         }
 

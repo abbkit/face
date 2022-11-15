@@ -28,6 +28,8 @@ public class ArcSoftEngine implements FaceEngine {
 
     private ArcSoftEngineVideoWorker videoWorker;
 
+    private ArcSoftEngineCompareFeatureWorker compareFeatureWorker;
+
     @PostConstruct
     private void init(){
         log.info("init arcsoft engine....");
@@ -38,6 +40,10 @@ public class ArcSoftEngine implements FaceEngine {
         ArcSoftEngineVideoWorker videoWorker=new ArcSoftEngineVideoWorker();
         videoWorker.init(key,engineConfiguration,functionConfiguration);
         this.videoWorker=videoWorker;
+
+        ArcSoftEngineCompareFeatureWorker compareFeatureWorker=new ArcSoftEngineCompareFeatureWorker();
+        compareFeatureWorker.init(key,engineConfiguration,functionConfiguration);
+        this.compareFeatureWorker=compareFeatureWorker;
     }
 
     @Override
@@ -75,5 +81,14 @@ public class ArcSoftEngine implements FaceEngine {
     @Override
     public void scanFaceFeatureVideo(File file, FaceFeatureListener listener) throws Exception {
 
+    }
+
+    @Override
+    public double compareFeature(FaceFeature source, FaceFeature target) throws Exception {
+        com.arcsoft.face.FaceFeature sourceFeature=new com.arcsoft.face.FaceFeature();
+        sourceFeature.setFeatureData(source.getFeature());
+        com.arcsoft.face.FaceFeature targetFeature=new com.arcsoft.face.FaceFeature();
+        targetFeature.setFeatureData(target.getFeature());
+        return compareFeatureWorker.compareFeature(sourceFeature,targetFeature);
     }
 }

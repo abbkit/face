@@ -31,4 +31,6 @@ public interface FaceEngine {
 
 
     void scanFaceFeatureVideo(File file,FaceFeatureListener listener) throws Exception;
+
+    double compareFeature(FaceFeature source,FaceFeature target) throws Exception;
 }

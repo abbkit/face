@@ -34,7 +34,12 @@ abstract public class ArcSoftEngineWorker {
 
     abstract public void init(Key key,ArcSoftEngineConfiguration arcSoftEngineConfiguration, ArcSoftFunctionConfiguration arcSoftFunctionConfiguration);
 
-    abstract public List<FaceFeature> syncFaceFeature(File file) throws Exception;
+    public List<FaceFeature> syncFaceFeature(File file) throws Exception{
+        throw new UnsupportedOperationException();
+    }
 
+    public double compareFeature(FaceFeature source,FaceFeature target) throws Exception{
+        throw new UnsupportedOperationException();
+    }
 
 }

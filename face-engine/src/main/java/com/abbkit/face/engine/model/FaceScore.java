@@ -5,12 +5,11 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class FaceFeature {
+public class FaceScore {
 
     private long faceId;
 
-    private byte[] feature;
+    private double score;
 
-    private String md5;
 
 }
